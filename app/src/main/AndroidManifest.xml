@@ -15,8 +15,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddCalendarActivity"
-            android:parentActivityName=".MainActivity"></activity>
+        <activity android:name=".DayActivity"></activity>
     </application>
 
 </manifest>

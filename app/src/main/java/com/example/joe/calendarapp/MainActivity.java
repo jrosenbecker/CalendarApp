@@ -6,18 +6,13 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.widget.CalendarView;
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private static ListView calendarListView;
-    private static List<String> calendarList;
-    private static ArrayAdapter<String> adapter;
+    CalendarView calendarView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +20,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
-        calendarListView = (ListView) findViewById(R.id.calendarList);
-
-
-        // TODO: load the list from a saved resource
-        calendarList = new ArrayList<String>();
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, calendarList);
+        calendarView = (CalendarView) findViewById(R.id.calendarView);
+        calendarView.setOnDateChangeListener(getDateChangeListener());
     }
 
     @Override
@@ -44,9 +35,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.add_calendar_button:
-                Intent intent = new Intent(getApplicationContext(), AddCalendarActivity.class);
-                startActivityForResult(intent, 1);
+            case R.id.add_event_button:
+                Intent intent = new Intent(getApplicationContext(), DayActivity.class);
+                intent.putExtra("DATE", calendarView.getDate());
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -55,13 +47,17 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onActivityResult (int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
-            addCalendarToList(data.getStringExtra("Add"));
+
         }
     }
 
-    public void addCalendarToList(String name)
-    {
-        calendarList.add(name);
-        adapter.notifyDataSetChanged();
+    private CalendarView.OnDateChangeListener getDateChangeListener() {
+        return new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                // TODO: Perform an action when the date is changed (may not be needed)
+            }
+        };
     }
+
 }

@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Calendar</string>
-    <string name="add_calendar">Add Calendar</string>
+    <string name="view_events">View Events</string>
 </resources>
