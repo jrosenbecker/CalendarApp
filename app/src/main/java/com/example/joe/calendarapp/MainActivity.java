@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CalendarView;
-import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -35,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.add_event_button:
+            case R.id.view_events:
                 Intent intent = new Intent(getApplicationContext(), DayActivity.class);
                 intent.putExtra("DATE", calendarView.getDate());
                 startActivity(intent);

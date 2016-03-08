@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.joe.calendarapp.MainActivity" >
-    <item android:id="@+id/view_events"
-        android:title="@string/view_events"
+    tools:context="com.example.joe.calendarapp.DayActivity" >
+    <item android:id="@+id/add_event"
+        android:title="@string/add_event"
         app:showAsAction="ifRoom" />
 </menu>
