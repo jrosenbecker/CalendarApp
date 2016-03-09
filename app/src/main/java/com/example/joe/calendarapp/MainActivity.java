@@ -1,17 +1,28 @@
 package com.example.joe.calendarapp;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CalendarView;
+import android.widget.Toast;
+
+import com.daogenerator.DaoMaster;
+import com.daogenerator.DaoSession;
+import com.daogenerator.EventDao;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 public class MainActivity extends AppCompatActivity {
 
     CalendarView calendarView;
+    private long selectedDate;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         calendarView = (CalendarView) findViewById(R.id.calendarView);
         calendarView.setOnDateChangeListener(getDateChangeListener());
+        selectedDate = calendarView.getDate();
     }
 
     @Override
@@ -36,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         switch(item.getItemId()) {
             case R.id.view_events:
                 Intent intent = new Intent(getApplicationContext(), DayActivity.class);
-                intent.putExtra("DATE", calendarView.getDate());
+                intent.putExtra("DATE", selectedDate);
                 startActivity(intent);
                 return true;
             default:
@@ -55,6 +67,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 // TODO: Perform an action when the date is changed (may not be needed)
+                Calendar c = Calendar.getInstance();
+                c.set(Calendar.YEAR, year);
+                c.set(Calendar.MONTH, month);
+                c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                selectedDate = c.getTimeInMillis();
+
+                SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy");
+
+
+                Toast.makeText(getApplicationContext(), format.format(c.getTime()), Toast.LENGTH_SHORT).show();
             }
         };
     }
