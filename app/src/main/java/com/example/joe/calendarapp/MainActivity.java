@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.daogenerator.DaoMaster;
 import com.daogenerator.DaoSession;
 import com.daogenerator.EventDao;
+import com.utils.DBUtility;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         calendarView = (CalendarView) findViewById(R.id.calendarView);
         calendarView.setOnDateChangeListener(getDateChangeListener());
         selectedDate = calendarView.getDate();
+        DBUtility.initDatabase(getApplicationContext());
     }
 
     @Override
@@ -51,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("DATE", selectedDate);
                 startActivity(intent);
                 return true;
+            case R.id.delete_all_events_option:
+                DBUtility.clean();
             default:
                 return super.onOptionsItemSelected(item);
         }

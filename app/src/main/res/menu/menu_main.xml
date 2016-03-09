@@ -6,4 +6,7 @@
     <item android:id="@+id/view_events"
         android:title="@string/view_events"
         app:showAsAction="ifRoom" />
+    <item android:id="@+id/delete_all_events_option"
+        android:title="Delete all events"
+        app:showAsAction="never" />
 </menu>

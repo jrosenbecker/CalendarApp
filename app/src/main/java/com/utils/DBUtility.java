@@ -79,4 +79,8 @@ public class DBUtility {
         qb.where(EventDao.Properties.Start_date.eq(dateString));
         return qb.list();
     }
+
+    public static void clean() {
+        daoMaster.dropAllTables(database, true);
+    }
 }
