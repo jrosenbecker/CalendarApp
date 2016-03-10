@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ public class DayActivity extends AppCompatActivity {
 
         dateTextView = (TextView) findViewById(R.id.dateText);
         eventListView = (ListView) findViewById(R.id.listView);
+        eventListView.setOnItemClickListener(onItemClicked);
 
         // Get the date data that was passed in
         Bundle extras = getIntent().getExtras();
@@ -71,6 +73,7 @@ public class DayActivity extends AppCompatActivity {
             case R.id.add_event:
                 Intent intent = new Intent(getApplicationContext(), AddEventActivity.class);
                 intent.putExtra("date", date);
+                intent.putExtra("existing_event", false);
                 startActivityForResult(intent, ADD_ACTIVITY_RESULT);
                 return true;
             default:
@@ -120,4 +123,11 @@ public class DayActivity extends AppCompatActivity {
         date.add(Calendar.DAY_OF_MONTH, -1);
         refreshActivity();
     }
+
+    private AdapterView.OnItemClickListener onItemClicked = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        }
+    };
 }
