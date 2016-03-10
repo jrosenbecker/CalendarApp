@@ -1,12 +1,12 @@
 package com.example.joe.calendarapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,6 +27,9 @@ public class DayActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     private ListView eventListView;
 
+    private static final SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy");
+    private static final int ADD_ACTIVITY_RESULT = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,24 +47,11 @@ public class DayActivity extends AppCompatActivity {
         date = Calendar.getInstance();
         date.setTimeInMillis(dateAsLong);
 
-        SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy");
-        dateTextView.setText(format.format(date.getTime()));
-
         DBUtility.initDatabase(getApplicationContext());
 
+        refreshActivity();
 
-        eventList = new ArrayList<String>();
 
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventList);
-        eventListView.setAdapter(adapter);
-
-        List<Event> events = DBUtility.getEvents(date);
-        for(Event e : events)
-        {
-            eventList.add(e.getName());
-        }
-
-        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -77,11 +67,45 @@ public class DayActivity extends AppCompatActivity {
             case R.id.add_event:
                 Intent intent = new Intent(getApplicationContext(), AddEventActivity.class);
                 intent.putExtra("date", date);
-                startActivity(intent);
+                startActivityForResult(intent, ADD_ACTIVITY_RESULT);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == ADD_ACTIVITY_RESULT) {
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    // TODO: Handle a date change from the activity
+                    date.setTimeInMillis(((Calendar) data.getExtras().get("start_date")).getTimeInMillis());
+                    refreshActivity();
+                    break;
+                case Activity.RESULT_CANCELED:
+                    refreshActivity();
+            }
+        }
+    }
+
+    private void refreshActivity() {
+        dateTextView.setText(format.format(date.getTime()));
+
+
+
+        eventList = new ArrayList<String>();
+
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventList);
+        eventListView.setAdapter(adapter);
+
+        List<Event> events = DBUtility.getEvents(date);
+        for(Event e : events)
+        {
+            eventList.add(e.getName());
+        }
+
+        adapter.notifyDataSetChanged();
+
+    }
 }

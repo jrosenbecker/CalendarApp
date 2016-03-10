@@ -157,7 +157,8 @@
                 android:id="@+id/button"
                 android:layout_weight=".5"
                 android:background="#aaaaaa"
-                android:layout_margin="10dp" />
+                android:layout_margin="10dp"
+                android:onClick="onCancelClick" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -166,7 +167,8 @@
                 android:id="@+id/button2"
                 android:layout_weight=".5"
                 android:background="#2a6cf0"
-                android:layout_margin="10dp" />
+                android:layout_margin="10dp"
+                android:onClick="onSubmitClick" />
         </LinearLayout>
 
     </LinearLayout>

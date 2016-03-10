@@ -1,9 +1,11 @@
 package com.example.joe.calendarapp;
 
 
+import android.app.Activity;
 import android.app.DatePickerDialog.OnDateSetListener;
 
 import android.app.TimePickerDialog.OnTimeSetListener;
+import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -145,7 +147,7 @@ public class AddEventActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            DialogFragment newFrag = new DatePickerFragment(startDateListener);
+            DialogFragment newFrag = new DatePickerFragment(startDateListener, startTime);
             newFrag.show(ft, "date_picker");
         }
     };
@@ -154,7 +156,7 @@ public class AddEventActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            DialogFragment newFrag = new TimePickerFragment(startTimeListener);
+            DialogFragment newFrag = new TimePickerFragment(startTimeListener, startTime);
             newFrag.show(ft, "time_picker");
         }
     };
@@ -163,7 +165,7 @@ public class AddEventActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            DialogFragment newFrag = new DatePickerFragment(endDateListener);
+            DialogFragment newFrag = new DatePickerFragment(endDateListener, endTime);
             newFrag.show(ft, "date_picker");
         }
     };
@@ -172,8 +174,21 @@ public class AddEventActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            DialogFragment newFrag = new TimePickerFragment(endTimeListener);
+            TimePickerFragment newFrag = new TimePickerFragment(endTimeListener, endTime);
             newFrag.show(ft, "time_picker");
         }
     };
+
+    public void onSubmitClick(View view) {
+        // TODO: Add the newly created event to the database
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("start_date", startTime);
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
+    }
+
+    public void onCancelClick(View view) {
+        setResult(Activity.RESULT_CANCELED);
+        finish();
+    }
 }
