@@ -15,14 +15,41 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />
 
-    <TextView
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/dateText"
-        android:textAlignment="center"
-        android:layout_margin="20dp" />
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/prev_button"
+            android:layout_gravity="center_vertical"
+            android:layout_weight=".4"
+            android:text="Prev"
+            android:onClick="prevButtonClicked" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
+            android:id="@+id/dateText"
+            android:textAlignment="center"
+            android:layout_margin="20dp"
+            android:layout_weight=".6" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            android:id="@+id/next_button"
+            android:layout_gravity="center_vertical"
+            android:layout_weight=".4"
+            android:onClick="nextButtonClicked" />
+    </LinearLayout>
 
     <ListView
         android:layout_width="match_parent"

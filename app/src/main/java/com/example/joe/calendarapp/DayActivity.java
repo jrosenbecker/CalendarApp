@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -108,5 +109,15 @@ public class DayActivity extends AppCompatActivity {
 
         adapter.notifyDataSetChanged();
 
+    }
+
+    public void nextButtonClicked(View v) {
+        date.add(Calendar.DAY_OF_MONTH, 1);
+        refreshActivity();
+    }
+
+    public void prevButtonClicked(View v) {
+        date.add(Calendar.DAY_OF_MONTH, -1);
+        refreshActivity();
     }
 }
