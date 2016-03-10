@@ -55,8 +55,6 @@ public class DayActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventList);
         eventListView.setAdapter(adapter);
 
-//        DBUtility.saveEvent(getApplicationContext(), "Test Event", start, start);
-
         List<Event> events = DBUtility.getEvents(date);
         for(Event e : events)
         {
@@ -64,7 +62,6 @@ public class DayActivity extends AppCompatActivity {
         }
 
         adapter.notifyDataSetChanged();
-
     }
 
     @Override
@@ -79,6 +76,7 @@ public class DayActivity extends AppCompatActivity {
         switch(item.getItemId()) {
             case R.id.add_event:
                 Intent intent = new Intent(getApplicationContext(), AddEventActivity.class);
+                intent.putExtra("date", date);
                 startActivity(intent);
                 return true;
             default:

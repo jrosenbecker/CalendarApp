@@ -16,12 +16,21 @@ import android.widget.TimePicker;
 import com.example.joe.calendarapp.dialogfragments.DatePickerFragment;
 import com.example.joe.calendarapp.dialogfragments.TimePickerFragment;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class AddEventActivity extends AppCompatActivity {
 
     TextView startDateTextView;
     TextView startTimeTextView;
     TextView endDateTextView;
     TextView endTimeTextView;
+
+    private Calendar startTime;
+    private Calendar endTime;
+
+    SimpleDateFormat timeFormat;
+    SimpleDateFormat dateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +47,40 @@ public class AddEventActivity extends AppCompatActivity {
         startTimeTextView.setOnClickListener(startTimeClickListener);
         endDateTextView.setOnClickListener(endDateClickListener);
         endTimeTextView.setOnClickListener(endTimeClickListener);
+
+        Bundle extras = getIntent().getExtras();
+        startTime = Calendar.getInstance();
+        endTime = Calendar.getInstance();
+        startTime = (Calendar) extras.get("date");
+        startTime.set(Calendar.HOUR_OF_DAY, 8);
+        startTime.set(Calendar.MINUTE, 0);
+
+        endTime.setTimeInMillis(startTime.getTimeInMillis());
+        endTime.add(Calendar.HOUR, 1);
+
+        dateFormat = new SimpleDateFormat("MMM dd, yyyy");
+        startDateTextView.setText(dateFormat.format(startTime.getTime()));
+        endDateTextView.setText(dateFormat.format(endTime.getTime()));
+
+        timeFormat = new SimpleDateFormat("hh:mm aa");
+        startTimeTextView.setText(timeFormat.format(startTime.getTime()));
+        endTimeTextView.setText(timeFormat.format(endTime.getTime()));
+
     }
 
     private OnDateSetListener startDateListener = new OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            startDateTextView.setText(year + "-" + monthOfYear + "-" + dayOfMonth);
+            startTime.set(Calendar.YEAR, year);
+            startTime.set(Calendar.MONTH, monthOfYear);
+            startTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+            if(endTime.before(startTime))
+            {
+                endTime.setTimeInMillis(startTime.getTimeInMillis());
+                endTime.add(Calendar.HOUR_OF_DAY, 1);
+            }
+            updateTextViews();
         }
     };
 
@@ -51,23 +88,54 @@ public class AddEventActivity extends AppCompatActivity {
     private OnTimeSetListener startTimeListener = new OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            startTimeTextView.setText(hourOfDay + ":" + minute);
+            startTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            startTime.set(Calendar.MINUTE, minute);
+
+            if(endTime.before(startTime))
+            {
+                endTime.setTimeInMillis(startTime.getTimeInMillis());
+                endTime.add(Calendar.HOUR_OF_DAY, 1);
+            }
+            updateTextViews();
         }
     };
 
     private OnDateSetListener endDateListener = new OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            endDateTextView.setText(year + "-" + monthOfYear + "-" + dayOfMonth);
+            endTime.set(Calendar.YEAR, year);
+            endTime.set(Calendar.MONTH, monthOfYear);
+            endTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+            if(startTime.after(endTime))
+            {
+                startTime.setTimeInMillis(endTime.getTimeInMillis());
+                startTime.add(Calendar.HOUR_OF_DAY, -1);
+            }
+            updateTextViews();
         }
     };
 
     private OnTimeSetListener endTimeListener = new OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            endTimeTextView.setText(hourOfDay + ":" + minute);
+            endTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            endTime.set(Calendar.MINUTE, minute);
+            if(startTime.after(endTime))
+            {
+                startTime.setTimeInMillis(endTime.getTimeInMillis());
+                startTime.add(Calendar.HOUR_OF_DAY, -1);
+            }
+            updateTextViews();
         }
     };
+
+    private void updateTextViews() {
+        startDateTextView.setText(dateFormat.format(startTime.getTime()));
+        startTimeTextView.setText(timeFormat.format(startTime.getTime()));
+        endDateTextView.setText(dateFormat.format(endTime.getTime()));
+        endTimeTextView.setText(timeFormat.format(endTime.getTime()));
+    }
 
 
 
