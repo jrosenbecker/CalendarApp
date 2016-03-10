@@ -12,11 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.joe.calendarapp.dialogfragments.DatePickerFragment;
 import com.example.joe.calendarapp.dialogfragments.TimePickerFragment;
+import com.utils.DBUtility;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -27,6 +29,8 @@ public class AddEventActivity extends AppCompatActivity {
     TextView startTimeTextView;
     TextView endDateTextView;
     TextView endTimeTextView;
+
+    EditText nameInput;
 
     private Calendar startTime;
     private Calendar endTime;
@@ -43,6 +47,8 @@ public class AddEventActivity extends AppCompatActivity {
         startTimeTextView = (TextView) findViewById(R.id.start_time_picker);
         endDateTextView = (TextView) findViewById(R.id.end_date_picker);
         endTimeTextView = (TextView) findViewById(R.id.end_time_picker);
+
+        nameInput = (EditText) findViewById(R.id.name_input);
 
 
         startDateTextView.setOnClickListener(startDateClickListener);
@@ -180,7 +186,8 @@ public class AddEventActivity extends AppCompatActivity {
     };
 
     public void onSubmitClick(View view) {
-        // TODO: Add the newly created event to the database
+        DBUtility.saveEvent(getApplicationContext(), nameInput.getText().toString(), startTime, endTime);
+
         Intent resultIntent = new Intent();
         resultIntent.putExtra("start_date", startTime);
         setResult(Activity.RESULT_OK, resultIntent);

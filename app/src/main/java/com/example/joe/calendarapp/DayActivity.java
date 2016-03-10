@@ -46,6 +46,8 @@ public class DayActivity extends AppCompatActivity {
         long dateAsLong = (long) extras.get("DATE");
         date = Calendar.getInstance();
         date.setTimeInMillis(dateAsLong);
+        date.set(Calendar.HOUR_OF_DAY, 0);
+        date.set(Calendar.MINUTE, 0);
 
         DBUtility.initDatabase(getApplicationContext());
 
@@ -81,6 +83,8 @@ public class DayActivity extends AppCompatActivity {
                 case Activity.RESULT_OK:
                     // TODO: Handle a date change from the activity
                     date.setTimeInMillis(((Calendar) data.getExtras().get("start_date")).getTimeInMillis());
+                    date.set(Calendar.HOUR_OF_DAY, 0);
+                    date.set(Calendar.MINUTE, 0);
                     refreshActivity();
                     break;
                 case Activity.RESULT_CANCELED:
@@ -91,9 +95,6 @@ public class DayActivity extends AppCompatActivity {
 
     private void refreshActivity() {
         dateTextView.setText(format.format(date.getTime()));
-
-
-
         eventList = new ArrayList<String>();
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventList);

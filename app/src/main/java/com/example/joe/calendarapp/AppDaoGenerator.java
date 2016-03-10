@@ -9,11 +9,10 @@ public class AppDaoGenerator {
         Schema schema = new Schema(1, "com.daogenerator");
         Entity event = schema.addEntity("Event");
         event.addIdProperty();
-        event.addStringProperty("start_date");
-        event.addStringProperty("start_time");
+
         event.addStringProperty("name");
-        event.addStringProperty("end_date");
-        event.addStringProperty("end_time");
+        event.addDateProperty("start");
+        event.addDateProperty("end");
 
         new DaoGenerator().generateAll(schema, "./app/src/main/java/");
     }

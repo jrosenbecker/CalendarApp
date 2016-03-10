@@ -60,11 +60,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    protected void onActivityResult (int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK) {
-
-        }
-    }
 
     private CalendarView.OnDateChangeListener getDateChangeListener() {
         return new CalendarView.OnDateChangeListener() {
@@ -76,11 +71,6 @@ public class MainActivity extends AppCompatActivity {
                 c.set(Calendar.MONTH, month);
                 c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 selectedDate = c.getTimeInMillis();
-
-                SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy");
-
-
-                Toast.makeText(getApplicationContext(), format.format(c.getTime()), Toast.LENGTH_SHORT).show();
             }
         };
     }

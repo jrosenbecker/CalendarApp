@@ -63,20 +63,21 @@ public class DBUtility {
 
     public static void saveEvent(Context context, String name, Calendar startDate, Calendar endDate) {
         Random rand = new Random();
-        String startDateString = startDate.get(Calendar.YEAR) + "-" + startDate.get(Calendar.MONTH) + "-" + startDate.get(Calendar.DAY_OF_MONTH);
-        String endDateString = endDate.get(Calendar.YEAR) + "-" + endDate.get(Calendar.MONTH) + "-" + endDate.get(Calendar.DAY_OF_MONTH);
 
-        Event event = new Event(rand.nextLong(), startDateString,
-                startDate.get(Calendar.HOUR_OF_DAY) + ":" + startDate.get(Calendar.MINUTE),
-                name, endDateString, endDate.get(Calendar.HOUR_OF_DAY) + ":" + endDate.get(Calendar.MINUTE));
+        Event event = new Event(rand.nextLong(), name, startDate.getTime(), endDate.getTime());
         eventDao.insert(event);
         closeReopenDatabase(context);
     }
 
-    public static List<Event> getEvents(Calendar date) {
+    public static List<Event> getEvents(Calendar startDate) {
         QueryBuilder<Event> qb = eventDao.queryBuilder();
-        String dateString = date.get(Calendar.YEAR) + "-" + date.get(Calendar.MONTH) + "-" + date.get(Calendar.DAY_OF_MONTH);
-        qb.where(EventDao.Properties.Start_date.eq(dateString));
+        Calendar endTime = Calendar.getInstance();
+
+        // Create a calendar element to represent the end of the day (startDate already should be midnight)
+        endTime.setTimeInMillis(startDate.getTimeInMillis());
+        endTime.set(Calendar.HOUR_OF_DAY, 23);
+        endTime.set(Calendar.MINUTE, 59);
+        qb.where(EventDao.Properties.Start.le(endTime.getTime()), EventDao.Properties.End.ge(startDate.getTime()));
         return qb.list();
     }
 

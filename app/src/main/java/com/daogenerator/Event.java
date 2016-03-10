@@ -7,11 +7,9 @@ package com.daogenerator;
 public class Event {
 
     private Long id;
-    private String start_date;
-    private String start_time;
     private String name;
-    private String end_date;
-    private String end_time;
+    private java.util.Date start;
+    private java.util.Date end;
 
     public Event() {
     }
@@ -20,13 +18,11 @@ public class Event {
         this.id = id;
     }
 
-    public Event(Long id, String start_date, String start_time, String name, String end_date, String end_time) {
+    public Event(Long id, String name, java.util.Date start, java.util.Date end) {
         this.id = id;
-        this.start_date = start_date;
-        this.start_time = start_time;
         this.name = name;
-        this.end_date = end_date;
-        this.end_time = end_time;
+        this.start = start;
+        this.end = end;
     }
 
     public Long getId() {
@@ -37,22 +33,6 @@ public class Event {
         this.id = id;
     }
 
-    public String getStart_date() {
-        return start_date;
-    }
-
-    public void setStart_date(String start_date) {
-        this.start_date = start_date;
-    }
-
-    public String getStart_time() {
-        return start_time;
-    }
-
-    public void setStart_time(String start_time) {
-        this.start_time = start_time;
-    }
-
     public String getName() {
         return name;
     }
@@ -61,20 +41,20 @@ public class Event {
         this.name = name;
     }
 
-    public String getEnd_date() {
-        return end_date;
+    public java.util.Date getStart() {
+        return start;
     }
 
-    public void setEnd_date(String end_date) {
-        this.end_date = end_date;
+    public void setStart(java.util.Date start) {
+        this.start = start;
     }
 
-    public String getEnd_time() {
-        return end_time;
+    public java.util.Date getEnd() {
+        return end;
     }
 
-    public void setEnd_time(String end_time) {
-        this.end_time = end_time;
+    public void setEnd(java.util.Date end) {
+        this.end = end;
     }
 
 }

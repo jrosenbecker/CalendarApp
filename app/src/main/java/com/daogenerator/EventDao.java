@@ -24,11 +24,9 @@ public class EventDao extends AbstractDao<Event, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Start_date = new Property(1, String.class, "start_date", false, "START_DATE");
-        public final static Property Start_time = new Property(2, String.class, "start_time", false, "START_TIME");
-        public final static Property Name = new Property(3, String.class, "name", false, "NAME");
-        public final static Property End_date = new Property(4, String.class, "end_date", false, "END_DATE");
-        public final static Property End_time = new Property(5, String.class, "end_time", false, "END_TIME");
+        public final static Property Name = new Property(1, String.class, "name", false, "NAME");
+        public final static Property Start = new Property(2, java.util.Date.class, "start", false, "START");
+        public final static Property End = new Property(3, java.util.Date.class, "end", false, "END");
     };
 
 
@@ -45,11 +43,9 @@ public class EventDao extends AbstractDao<Event, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'EVENT' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
-                "'START_DATE' TEXT," + // 1: start_date
-                "'START_TIME' TEXT," + // 2: start_time
-                "'NAME' TEXT," + // 3: name
-                "'END_DATE' TEXT," + // 4: end_date
-                "'END_TIME' TEXT);"); // 5: end_time
+                "'NAME' TEXT," + // 1: name
+                "'START' INTEGER," + // 2: start
+                "'END' INTEGER);"); // 3: end
     }
 
     /** Drops the underlying database table. */
@@ -68,29 +64,19 @@ public class EventDao extends AbstractDao<Event, Long> {
             stmt.bindLong(1, id);
         }
  
-        String start_date = entity.getStart_date();
-        if (start_date != null) {
-            stmt.bindString(2, start_date);
-        }
- 
-        String start_time = entity.getStart_time();
-        if (start_time != null) {
-            stmt.bindString(3, start_time);
-        }
- 
         String name = entity.getName();
         if (name != null) {
-            stmt.bindString(4, name);
+            stmt.bindString(2, name);
         }
  
-        String end_date = entity.getEnd_date();
-        if (end_date != null) {
-            stmt.bindString(5, end_date);
+        java.util.Date start = entity.getStart();
+        if (start != null) {
+            stmt.bindLong(3, start.getTime());
         }
  
-        String end_time = entity.getEnd_time();
-        if (end_time != null) {
-            stmt.bindString(6, end_time);
+        java.util.Date end = entity.getEnd();
+        if (end != null) {
+            stmt.bindLong(4, end.getTime());
         }
     }
 
@@ -105,11 +91,9 @@ public class EventDao extends AbstractDao<Event, Long> {
     public Event readEntity(Cursor cursor, int offset) {
         Event entity = new Event( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // start_date
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // start_time
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // name
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // end_date
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // end_time
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
+            cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)), // start
+            cursor.isNull(offset + 3) ? null : new java.util.Date(cursor.getLong(offset + 3)) // end
         );
         return entity;
     }
@@ -118,11 +102,9 @@ public class EventDao extends AbstractDao<Event, Long> {
     @Override
     public void readEntity(Cursor cursor, Event entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setStart_date(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setStart_time(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setEnd_date(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setEnd_time(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setStart(cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)));
+        entity.setEnd(cursor.isNull(offset + 3) ? null : new java.util.Date(cursor.getLong(offset + 3)));
      }
     
     /** @inheritdoc */
