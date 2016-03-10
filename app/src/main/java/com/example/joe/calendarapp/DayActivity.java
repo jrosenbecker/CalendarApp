@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.daogenerator.Event;
 import com.utils.DBUtility;
+import com.utils.EventAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,8 +25,8 @@ public class DayActivity extends AppCompatActivity {
 
     private Calendar date;
     private TextView dateTextView;
-    private List<String> eventList;
-    private ArrayAdapter<String> adapter;
+    private List<Event> eventList;
+    private EventAdapter adapter;
     private ListView eventListView;
 
     private static final SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy");
@@ -82,7 +83,6 @@ public class DayActivity extends AppCompatActivity {
         if(requestCode == ADD_ACTIVITY_RESULT) {
             switch (resultCode) {
                 case Activity.RESULT_OK:
-                    // TODO: Handle a date change from the activity
                     date.setTimeInMillis(((Calendar) data.getExtras().get("start_date")).getTimeInMillis());
                     date.set(Calendar.HOUR_OF_DAY, 0);
                     date.set(Calendar.MINUTE, 0);
@@ -96,15 +96,15 @@ public class DayActivity extends AppCompatActivity {
 
     private void refreshActivity() {
         dateTextView.setText(format.format(date.getTime()));
-        eventList = new ArrayList<String>();
+        eventList = new ArrayList<Event>();
 
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, eventList);
+        adapter = new EventAdapter(DayActivity.this, eventList);
         eventListView.setAdapter(adapter);
 
         List<Event> events = DBUtility.getEvents(date);
         for(Event e : events)
         {
-            eventList.add(e.getName());
+            eventList.add(e);
         }
 
         adapter.notifyDataSetChanged();

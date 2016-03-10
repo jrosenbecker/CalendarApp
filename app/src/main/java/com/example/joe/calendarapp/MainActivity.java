@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
         return true;
     }
 
@@ -65,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
         return new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                // TODO: Perform an action when the date is changed (may not be needed)
                 Calendar c = Calendar.getInstance();
                 c.set(Calendar.YEAR, year);
                 c.set(Calendar.MONTH, month);

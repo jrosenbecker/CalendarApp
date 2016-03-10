@@ -1,4 +1,4 @@
-package com.example.joe.calendarapp;
+package com.daogenerator;
 
 import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Schema;
