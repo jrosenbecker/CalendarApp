@@ -5,12 +5,16 @@ import android.app.Activity;
 import android.app.DatePickerDialog.OnDateSetListener;
 
 import android.app.TimePickerDialog.OnTimeSetListener;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -49,7 +53,20 @@ public class AddEventActivity extends AppCompatActivity {
         endDateTextView = (TextView) findViewById(R.id.end_date_picker);
         endTimeTextView = (TextView) findViewById(R.id.end_time_picker);
 
+
         nameInput = (EditText) findViewById(R.id.name_input);
+        nameInput.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+                    nameInput.clearFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
 
 
         startDateTextView.setOnClickListener(startDateClickListener);
@@ -187,12 +204,17 @@ public class AddEventActivity extends AppCompatActivity {
     };
 
     public void onSubmitClick(View view) {
-        DBUtility.saveEvent(getApplicationContext(), nameInput.getText().toString(), startTime, endTime);
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("start_date", startTime);
-        setResult(Activity.RESULT_OK, resultIntent);
-        Toast.makeText(getApplicationContext(), "Successfully added event!", Toast.LENGTH_SHORT).show();
-        finish();
+        if(nameInput.getText().toString().trim().isEmpty())
+        {
+            Toast.makeText(getApplicationContext(), "Event name field must not be blank", Toast.LENGTH_LONG).show();
+        } else {
+            DBUtility.saveEvent(getApplicationContext(), nameInput.getText().toString(), startTime, endTime);
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("start_date", startTime);
+            setResult(Activity.RESULT_OK, resultIntent);
+            Toast.makeText(getApplicationContext(), "Successfully added event!", Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     public void onCancelClick(View view) {

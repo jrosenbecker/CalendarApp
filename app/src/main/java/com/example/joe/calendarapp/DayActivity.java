@@ -45,6 +45,8 @@ public class DayActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.day_toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
         dateTextView = (TextView) findViewById(R.id.dateText);
         eventListView = (ListView) findViewById(R.id.listView);
         eventListView.setOnItemClickListener(onItemClicked);
