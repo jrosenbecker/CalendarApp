@@ -17,18 +17,31 @@ import java.util.Calendar;
 public class DatePickerFragment extends DialogFragment {
 
     private OnDateSetListener dateSetListener;
-    Calendar initDate;
+    private Calendar initDate;
 
+    /**
+     * Empty constructor
+     */
     public DatePickerFragment() {
         // Do nothing
     }
 
+    /**
+     * Constructor. Sets the date and listener
+     * @param listener
+     * @param date
+     */
     public DatePickerFragment(OnDateSetListener listener, Calendar date) {
         dateSetListener = listener;
         initDate = Calendar.getInstance();
         initDate.setTimeInMillis(date.getTimeInMillis());
     }
 
+    /**
+     * Brings up the date picker dialog
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         int year = initDate.get(Calendar.YEAR);

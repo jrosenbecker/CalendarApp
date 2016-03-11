@@ -37,16 +37,22 @@ public class DayActivity extends AppCompatActivity {
     private static final SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy");
     private static final int ADD_ACTIVITY_RESULT = 1;
 
+    /**
+     * Initializes View elements and sets listeners
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day);
 
+        // Initializes the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.day_toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
+
+        // Sets the listeners and finds the views
         dateTextView = (TextView) findViewById(R.id.dateText);
         eventListView = (ListView) findViewById(R.id.listView);
         eventListView.setOnItemClickListener(onItemClicked);
@@ -59,13 +65,20 @@ public class DayActivity extends AppCompatActivity {
         date.set(Calendar.HOUR_OF_DAY, 0);
         date.set(Calendar.MINUTE, 0);
 
+        // Initizlizes the database (if it hasn't been initialized)
         DBUtility.initDatabase(getApplicationContext());
 
+        // Prints the correct information to each TextView/ListView
         refreshActivity();
 
 
     }
 
+    /**
+     * Runs after the options menu is created
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -73,10 +86,17 @@ public class DayActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Handles the selecting of options views
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
+            // Add event option is selected
             case R.id.add_event:
+                // Starts an AddEventActivity and passes it the currently selected date
                 Intent intent = new Intent(getApplicationContext(), AddEventActivity.class);
                 intent.putExtra("date", date);
                 startActivityForResult(intent, ADD_ACTIVITY_RESULT);
@@ -86,11 +106,19 @@ public class DayActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Called when the AddEventActivity returns
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == ADD_ACTIVITY_RESULT) {
             switch (resultCode) {
                 case Activity.RESULT_OK:
+                    // If the user saved a new event for a different day, switch to that day and
+                    // display the events for that day
                     date.setTimeInMillis(((Calendar) data.getExtras().get("start_date")).getTimeInMillis());
                     date.set(Calendar.HOUR_OF_DAY, 0);
                     date.set(Calendar.MINUTE, 0);
@@ -102,6 +130,9 @@ public class DayActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Refreshes all of the events in the Event list
+     */
     private void refreshActivity() {
         dateTextView.setText(format.format(date.getTime()));
         eventList = new ArrayList<Event>();
@@ -119,16 +150,28 @@ public class DayActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Moves to the next day
+     * @param v
+     */
     public void nextButtonClicked(View v) {
         date.add(Calendar.DAY_OF_MONTH, 1);
         refreshActivity();
     }
 
+    /**
+     * Moves to the previous day
+     * @param v
+     */
     public void prevButtonClicked(View v) {
         date.add(Calendar.DAY_OF_MONTH, -1);
         refreshActivity();
     }
 
+    /**
+     * Listener for when a list item is clicked. Displays a delete dialog and deletes based on the
+     * user's input
+     */
     private AdapterView.OnItemClickListener onItemClicked = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

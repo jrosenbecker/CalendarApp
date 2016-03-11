@@ -30,30 +30,29 @@ import java.util.Calendar;
 
 public class AddEventActivity extends AppCompatActivity {
 
-    TextView startDateTextView;
-    TextView startTimeTextView;
-    TextView endDateTextView;
-    TextView endTimeTextView;
+    private TextView startDateTextView;
+    private TextView startTimeTextView;
+    private TextView endDateTextView;
+    private TextView endTimeTextView;
 
-    EditText nameInput;
+    private EditText nameInput;
 
     private Calendar startTime;
     private Calendar endTime;
 
-    SimpleDateFormat timeFormat;
-    SimpleDateFormat dateFormat;
+    private SimpleDateFormat timeFormat;
+    private SimpleDateFormat dateFormat;
 
+    /**
+     * Runs when the view is created
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
-        startDateTextView = (TextView) findViewById(R.id.start_date_picker);
-        startTimeTextView = (TextView) findViewById(R.id.start_time_picker);
-        endDateTextView = (TextView) findViewById(R.id.end_date_picker);
-        endTimeTextView = (TextView) findViewById(R.id.end_time_picker);
-
-
+        // Set up the EditText element so that the enter key will get rid of the on-screen keyboard
         nameInput = (EditText) findViewById(R.id.name_input);
         nameInput.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -68,22 +67,32 @@ public class AddEventActivity extends AppCompatActivity {
             }
         });
 
+        // Initialize all of the TextViews
+        startDateTextView = (TextView) findViewById(R.id.start_date_picker);
+        startTimeTextView = (TextView) findViewById(R.id.start_time_picker);
+        endDateTextView = (TextView) findViewById(R.id.end_date_picker);
+        endTimeTextView = (TextView) findViewById(R.id.end_time_picker);
 
+        // Set the listeners for all of the TextViews
         startDateTextView.setOnClickListener(startDateClickListener);
         startTimeTextView.setOnClickListener(startTimeClickListener);
         endDateTextView.setOnClickListener(endDateClickListener);
         endTimeTextView.setOnClickListener(endTimeClickListener);
 
+        // Extract the date from the previous activity (passed via an Intent)
         Bundle extras = getIntent().getExtras();
         startTime = Calendar.getInstance();
         endTime = Calendar.getInstance();
         startTime = (Calendar) extras.get("date");
+
+        // Sets the start and end variables to default values
         startTime.set(Calendar.HOUR_OF_DAY, 8);
         startTime.set(Calendar.MINUTE, 0);
 
         endTime.setTimeInMillis(startTime.getTimeInMillis());
         endTime.add(Calendar.HOUR, 1);
 
+        // Display the times in the TextViews
         dateFormat = new SimpleDateFormat("MMM dd, yyyy");
         startDateTextView.setText(dateFormat.format(startTime.getTime()));
         endDateTextView.setText(dateFormat.format(endTime.getTime()));
@@ -94,6 +103,9 @@ public class AddEventActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Listener for the start date TextView
+     */
     private OnDateSetListener startDateListener = new OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -110,7 +122,9 @@ public class AddEventActivity extends AppCompatActivity {
         }
     };
 
-
+    /**
+     * Listener for the start time TextView
+     */
     private OnTimeSetListener startTimeListener = new OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -126,6 +140,9 @@ public class AddEventActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Listener for the end date TextView
+     */
     private OnDateSetListener endDateListener = new OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -142,6 +159,9 @@ public class AddEventActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Listener for the start time TextView
+     */
     private OnTimeSetListener endTimeListener = new OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -156,6 +176,9 @@ public class AddEventActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Updates the text views if the Calendar variables change
+     */
     private void updateTextViews() {
         startDateTextView.setText(dateFormat.format(startTime.getTime()));
         startTimeTextView.setText(timeFormat.format(startTime.getTime()));

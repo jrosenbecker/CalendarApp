@@ -16,10 +16,13 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
-    CalendarView calendarView;
+    private CalendarView calendarView;
     private long selectedDate;
 
-
+    /**
+     * Creates the calendar view and sets the tool bar
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +35,11 @@ public class MainActivity extends AppCompatActivity {
         DBUtility.initDatabase(getApplicationContext());
     }
 
+    /**
+     * Creates the options menu
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -39,14 +47,21 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Handles when an options item is selected
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
+            // Opens the DayActivity screen and passes in the selected day
             case R.id.view_events:
                 Intent intent = new Intent(getApplicationContext(), DayActivity.class);
                 intent.putExtra("DATE", selectedDate);
                 startActivity(intent);
                 return true;
+            // Clears out the database if "Delete all events" is selected
             case R.id.delete_all_events_option:
                 DBUtility.clean();
             default:
@@ -55,6 +70,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Listener  which changes the Calendar variable for the date every time
+     * the date changes
+     * @return
+     */
     private CalendarView.OnDateChangeListener getDateChangeListener() {
         return new CalendarView.OnDateChangeListener() {
             @Override
