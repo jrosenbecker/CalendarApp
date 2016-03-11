@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
+import de.greenrobot.dao.query.DeleteQuery;
 import de.greenrobot.dao.query.QueryBuilder;
 
 /**
@@ -77,8 +78,12 @@ public class DBUtility {
         endTime.setTimeInMillis(startDate.getTimeInMillis());
         endTime.set(Calendar.HOUR_OF_DAY, 23);
         endTime.set(Calendar.MINUTE, 59);
-        qb.where(EventDao.Properties.Start.le(endTime.getTime()), EventDao.Properties.End.ge(startDate.getTime()));
+        qb.where(EventDao.Properties.Start.le(endTime.getTime()), EventDao.Properties.End.ge(startDate.getTime())).orderAsc(EventDao.Properties.Start);
         return qb.list();
+    }
+
+    public static void deleteEvent(Event e) {
+        eventDao.delete(e);
     }
 
     public static void clean() {

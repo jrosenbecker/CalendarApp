@@ -56,7 +56,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/listView"
         android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="20px"
-        android:layout_marginRight="20px" />
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp" />
 
 </LinearLayout>

@@ -1,6 +1,8 @@
 package com.example.joe.calendarapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +22,8 @@ import com.utils.EventAdapter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class DayActivity extends AppCompatActivity {
@@ -73,7 +77,6 @@ public class DayActivity extends AppCompatActivity {
             case R.id.add_event:
                 Intent intent = new Intent(getApplicationContext(), AddEventActivity.class);
                 intent.putExtra("date", date);
-                intent.putExtra("existing_event", false);
                 startActivityForResult(intent, ADD_ACTIVITY_RESULT);
                 return true;
             default:
@@ -127,7 +130,17 @@ public class DayActivity extends AppCompatActivity {
     private AdapterView.OnItemClickListener onItemClicked = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+            final Event clickedEvent = (Event) adapter.getItem(position);
+            AlertDialog.Builder dialog = new AlertDialog.Builder(DayActivity.this);
+            dialog.setTitle("Delete Event");
+            dialog.setMessage("Would you like to delete the following event:\n" + clickedEvent.getName() + "?");
+            dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    DBUtility.deleteEvent(clickedEvent);
+                    refreshActivity();
+                }
+            }).setNegativeButton("Cancel", null).show();
         }
     };
 }

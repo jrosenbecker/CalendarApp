@@ -15,6 +15,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.joe.calendarapp.dialogfragments.DatePickerFragment;
 import com.example.joe.calendarapp.dialogfragments.TimePickerFragment;
@@ -187,10 +188,10 @@ public class AddEventActivity extends AppCompatActivity {
 
     public void onSubmitClick(View view) {
         DBUtility.saveEvent(getApplicationContext(), nameInput.getText().toString(), startTime, endTime);
-
         Intent resultIntent = new Intent();
         resultIntent.putExtra("start_date", startTime);
         setResult(Activity.RESULT_OK, resultIntent);
+        Toast.makeText(getApplicationContext(), "Successfully added event!", Toast.LENGTH_SHORT).show();
         finish();
     }
 
